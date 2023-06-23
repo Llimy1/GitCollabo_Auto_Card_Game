@@ -42,12 +42,11 @@ def motor_function():
 
         # 입력이 "s"이면 동작 시작
         if start == "s":
-            num_people = int(input("인원 수를 입력하세요 (최대 4명): "))
-
-            if (num_people < 0 and num_people > 4):
+            if (num_people > 0 and num_people <= 4):
+                num_people = int(input("인원 수를 입력하세요 (최대 4명): "))
+            else:
                 print("인원수를 잘못 입력했습니다. 다시 입력해주세요.")
-
-
+                
             num_people = min(4, num_people)
 
             current_count = 1
