@@ -34,6 +34,7 @@ def top_rotate_motor(motor, angle):
     time.sleep(0.5)
     motor.ChangeDutyCycle(0)
 
+num_people = 0
 
 def motor_function():
     gobal num_people
@@ -43,37 +44,37 @@ def motor_function():
 
         # 입력이 "s"이면 동작 시작
         if start == "s":
-            if (num_people > 0 and num_people <= 4):
-                num_people = int(input("인원 수를 입력하세요 (최대 4명): "))
-            else:
+            num_people = int(input("인원 수를 입력하세요 (최대 4명): "))
+        
+            if (num_people < 0 and num_people > 4):
                 print("인원수를 잘못 입력했습니다. 다시 입력해주세요.")
+            else:    
+                num_people = min(4, num_people)
+    
+                current_count = 1
+    
+                if current_count <= num_people:
+                    # 1번 모터 작동
+                    under_rotate_motor(motor1, 360 / num_people * current_count)
+    
+                    # 1번 모터가 작동을 마치면 숫자를 라즈베리파이로 보냄
+                    time.sleep(1)
+    
+                    # 2번 모터 작동
+                    top_rotate_motor (motor2, 360 / num_people * current_count)
+                       
+                     # 2번 모터가 작동을 마치면 숫자를 증가시킴 후 라즈베리파이로 보냄
+                    current_count += 1
+                    time.sleep(1)
+    
+                    # 현재 숫자가 인원수를 넘으면 반복 종료
+                    if current_count > num_people:
+                        break
                 
-            num_people = min(4, num_people)
-
-            current_count = 1
-
-            if current_count <= num_people:
-                # 1번 모터 작동
-                under_rotate_motor(motor1, 360 / num_people * current_count)
-
-                # 1번 모터가 작동을 마치면 숫자를 라즈베리파이로 보냄
-                time.sleep(1)
-
-                # 2번 모터 작동
-                top_rotate_motor (motor2, 360 / num_people * current_count)
-                   
-                 # 2번 모터가 작동을 마치면 숫자를 증가시킴 후 라즈베리파이로 보냄
-                current_count += 1
-                time.sleep(1)
-
-                # 현재 숫자가 인원수를 넘으면 반복 종료
-                if current_count > num_people:
-                    break
-            
-        # 모터 정지 및 GPIO 클린업
-        motor1.stop()
-        motor2.stop()
-        GPIO.cleanup()
+            # 모터 정지 및 GPIO 클린업
+            motor1.stop()
+            motor2.stop()
+            GPIO.cleanup()
 
 if __name__ == "__main__":
     motor_function()
