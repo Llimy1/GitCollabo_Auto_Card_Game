@@ -36,6 +36,7 @@ def top_rotate_motor(motor, angle):
 
 
 def motor_function():
+    gobal num_people
     while True:
     # 사용자 입력 받음
         start = input("시작하려면 's'를 입력하세요: ")
